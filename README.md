@@ -133,3 +133,17 @@ Support Gen currently measures the journey **after somebody reaches a campaign l
 ### Message testing
 
 Campaign entries can override the default `headline` and `intro`. This lets DevComms create separate factual variants for different channels or tests while keeping the underlying scheme configuration and reporting in one project.
+
+
+## Project manager
+
+Support Gen now includes a browser-based project manager at the application root.
+
+- `/` — list and manage projects.
+- `/admin/projects/new` — create a new project.
+- `/admin/projects/[projectSlug]/edit` — edit an existing project.
+- New projects can configure client/controller details, scheme and application reference, LPA recipients, branding, support reasons, Reach, privacy contact and retention.
+- The editor automatically creates the standard opening, transition, closing and benefit-phrasing variation library around the project facts.
+- Castle Hills remains a seeded example. Once the database is connected, editing a seeded project can create a database-backed override without changing application code.
+
+Database-backed project creation requires the `project_configs` table defined in the Drizzle schema. Run `npm run db:push` after connecting the database.
