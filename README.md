@@ -147,3 +147,22 @@ Support Gen now includes a browser-based project manager at the application root
 - Castle Hills remains a seeded example. Once the database is connected, editing a seeded project can create a database-backed override without changing application code.
 
 Database-backed project creation requires the `project_configs` table defined in the Drizzle schema. Run `npm run db:push` after connecting the database.
+
+
+## Campaign Studio pivot
+
+Support Gen's primary workflow is now an internal paid-social Campaign Studio rather than a resident letter generator.
+
+For each project, `/admin/[projectSlug]/ads` generates:
+- four factual ad concepts based only on approved project facts;
+- Meta primary text/captions, headlines, descriptions and CTA;
+- image briefs and generated creative;
+- downloadable 4:5, 1:1 and 9:16 crops;
+- a broad local audience/targeting recommendation;
+- placement, optimisation, testing and pre-launch compliance notes.
+
+The studio uses Vercel AI Gateway. Deployed Vercel functions can authenticate with the project's OIDC token, so no provider API key is required in the application code. Image generation uses OpenAI GPT Image 2.5 Flare through AI Gateway.
+
+Campaign audience recommendations deliberately avoid political affiliation and sensitive-characteristic profiling. They are intended as a starting setup for testing in the ad account, not a substitute for live campaign performance data.
+
+The legacy letter-generator code is no longer part of the main UI or project workflow.
