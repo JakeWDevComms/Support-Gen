@@ -40,7 +40,7 @@ export type ProjectConfig = {
   planningAuthority: { name: string; to: string[]; cc?: string[] };
   theme: { primary: string; primaryDark: string; accent: string; background: string; logoUrl?: string };
   benefits: SupportBenefit[];
-  letter: { salutations: string[]; openings: string[]; closings: string[]; subject: string; transparencyLine?: string };
+  letter: { salutations: string[]; openings: string[]; transitions?: string[]; closings: string[]; subject: string; transparencyLine?: string };
   reach?: ReachConfig;
   consultationCloses?: string;
   retentionMonths: number;
