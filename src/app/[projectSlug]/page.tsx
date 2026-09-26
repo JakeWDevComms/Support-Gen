@@ -4,7 +4,7 @@ import { SupportForm } from "@/components/support-form";
 import { getProject } from "@/lib/projects";
 
 export default async function ProjectPage({params,searchParams}:{params:Promise<{projectSlug:string}>;searchParams:Promise<Record<string,string|string[]|undefined>>}){
-  const {projectSlug}=await params,project=getProject(projectSlug);
+  const {projectSlug}=await params,project=await getProject(projectSlug);
   if(!project)notFound();
 
   const query=await searchParams;
