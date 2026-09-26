@@ -26,28 +26,28 @@ export default async function AdminProjectPage({params}:{params:Promise<{project
  const dayRows=[...byDay].sort((a,b)=>a[0].localeCompare(b[0])).slice(-30),maxDay=Math.max(1,...dayRows.map(v=>v[1]));
  const districtRows=[...districts].map(([district,set])=>[district,set.size] as const).sort((a,b)=>b[1]-a[1]).slice(0,12);
 
- return <main className="min-h-screen bg-[#eef3f1] px-5 py-8 md:px-8">
+ return <main className="min-h-screen bg-[#eef4f1] px-5 py-8 md:px-8 md:py-10">
   <div className="mx-auto max-w-7xl">
-   <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+   <div className="rounded-2xl border border-amber-200/80 bg-amber-50/80 px-4 py-3 text-sm text-amber-900 shadow-sm">
     <strong>Build mode:</strong> admin login is temporarily disabled while Support Gen is being developed.
    </div>
 
-   <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+   <div className="mt-6 rounded-[28px] bg-[#0b3f47] px-6 py-7 text-white shadow-[0_18px_50px_rgba(16,58,64,.13)] md:flex md:items-end md:justify-between md:gap-6 md:px-8">
     <div>
-     <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#006f78]">Support Gen admin</p>
-     <h1 className="mt-2 text-4xl font-bold">{project.schemeName}</h1>
-     <p className="mt-2 text-[#657376]">{project.applicationReference}</p>
+     <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">Support Gen admin</p>
+     <h1 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">{project.schemeName}</h1>
+     <p className="mt-2 text-white/65">{project.applicationReference}</p>
     </div>
-    <div className="flex flex-wrap gap-3">
-     <Link href="/" className="rounded-xl border border-[#c8d4d1] bg-white px-4 py-3 font-bold">Home</Link>
-     {project.reach?<Link href={`/admin/${project.slug}/reach`} className="rounded-xl bg-[#083f47] px-4 py-3 font-bold text-white">Reach dashboard</Link>:null}
-     <a href={`/api/admin/export/${project.slug}`} className="rounded-xl bg-[#006f78] px-4 py-3 font-bold text-white">Export CSV</a>
+    <div className="mt-5 flex flex-wrap gap-2.5 md:mt-0">
+     <Link href="/" className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 font-bold text-white transition hover:bg-white/15">Home</Link>
+     {project.reach?<Link href={`/admin/${project.slug}/reach`} className="rounded-xl bg-white px-4 py-3 font-bold text-[#0b3f47] transition hover:-translate-y-0.5">Reach dashboard</Link>:null}
+     <a href={`/api/admin/export/${project.slug}`} className="rounded-xl bg-[#0f737b] px-4 py-3 font-bold text-white ring-1 ring-white/10 transition hover:-translate-y-0.5">Export CSV</a>
     </div>
    </div>
 
    {!process.env.DATABASE_URL?<div className="mt-6 rounded-2xl border border-[#d8e1de] bg-white px-5 py-4 text-sm leading-6 text-[#536467]"><strong>Database not connected yet.</strong> The dashboard is shown in preview mode with zero values. Once Neon is connected, live supporter data will appear here automatically.</div>:null}
 
-   <div className="mt-8 grid gap-4 sm:grid-cols-3">
+   <div className="mt-7 grid gap-4 sm:grid-cols-3">
     <Stat label="Unique supporters" value={unique}/>
     <Stat label="Recorded actions" value={rows.length}/>
     <Stat label="Duplicate actions flagged" value={duplicates}/>
@@ -62,6 +62,6 @@ export default async function AdminProjectPage({params}:{params:Promise<{project
   </div>
  </main>;
 }
-function Stat({label,value}:{label:string;value:number}){return <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5"><div className="text-sm text-[#657376]">{label}</div><div className="mt-2 text-4xl font-bold text-[#083f47]">{value}</div></div>;}
-function Panel({title,children}:{title:string;children:ReactNode}){return <section className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5"><h2 className="text-xl font-bold">{title}</h2><div className="mt-5">{children}</div></section>;}
+function Stat({label,value}:{label:string;value:number}){return <div className="rounded-[24px] bg-white p-6 shadow-[0_12px_34px_rgba(20,53,57,.06)] ring-1 ring-black/[0.04]"><div className="text-xs font-bold uppercase tracking-[0.12em] text-[#7b898b]">{label}</div><div className="mt-3 text-4xl font-bold tracking-tight text-[#0b3f47]">{value}</div></div>;}
+function Panel({title,children}:{title:string;children:ReactNode}){return <section className="rounded-[26px] bg-white p-6 shadow-[0_12px_34px_rgba(20,53,57,.06)] ring-1 ring-black/[0.04]"><h2 className="text-xl font-bold tracking-tight text-[#173136]">{title}</h2><div className="mt-5">{children}</div></section>;}
 function Empty({text}:{text:string}){return <p className="text-sm text-[#657376]">{text}</p>;}
