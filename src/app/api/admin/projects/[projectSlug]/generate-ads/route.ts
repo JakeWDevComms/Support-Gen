@@ -1,4 +1,3 @@
-import { generateText } from "ai";
 import { NextResponse } from "next/server";
 import { getProject } from "@/lib/projects";
 
@@ -78,10 +77,32 @@ Return ONLY valid JSON with this exact shape:
 }
 `;
 
-  const {text}=await generateText({
-    model:"openai/gpt-5.6",
-    prompt
+  const token=process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN;
+  if(!token)return NextResponse.json({error:"Vercel AI Gateway authentication is not available."},{status:503});
+
+  const gatewayResponse=await fetch("https://ai-gateway.vercel.sh/v1/chat/completions",{
+    method:"POST",
+    headers:{
+      "authorization":`Bearer ${token}`,
+      "content-type":"application/json"
+    },
+    body:JSON.stringify({
+      model:"openai/gpt-5.4",
+      messages:[{role:"user",content:prompt}],
+      stream:false
+    })
   });
+
+  const gatewayData=await gatewayResponse.json() as {
+    choices?:Array<{message?:{content?:string}}>;
+    error?:{message?:string}
+  };
+
+  if(!gatewayResponse.ok){
+    return NextResponse.json({error:gatewayData.error?.message??"Campaign generation failed."},{status:gatewayResponse.status});
+  }
+
+  const text=gatewayData.choices?.[0]?.message?.content??"";
 
   try{
     return NextResponse.json(extractJson(text));
