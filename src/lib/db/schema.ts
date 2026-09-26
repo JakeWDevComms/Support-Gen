@@ -1,4 +1,5 @@
 import { boolean,index,jsonb,pgTable,text,timestamp,uuid } from "drizzle-orm/pg-core";
+
 export const submissions=pgTable("submissions",{
   id:uuid("id").defaultRandom().primaryKey(),
   createdAt:timestamp("created_at",{withTimezone:true}).defaultNow().notNull(),
@@ -20,4 +21,24 @@ export const submissions=pgTable("submissions",{
   index("submissions_project_created_idx").on(table.projectId,table.createdAt),
   index("submissions_project_supporter_idx").on(table.projectId,table.supporterFingerprint),
   index("submissions_project_ip_idx").on(table.projectId,table.ipHash,table.createdAt)
+]);
+
+export const reachEvents=pgTable("reach_events",{
+  id:uuid("id").defaultRandom().primaryKey(),
+  createdAt:timestamp("created_at",{withTimezone:true}).defaultNow().notNull(),
+  projectId:text("project_id").notNull(),
+  campaignSlug:text("campaign_slug"),
+  eventType:text("event_type").notNull(),
+  visitorId:text("visitor_id").notNull(),
+  source:text("source"),
+  medium:text("medium"),
+  campaign:text("campaign"),
+  content:text("content"),
+  term:text("term"),
+  referrer:text("referrer"),
+  ipHash:text("ip_hash").notNull()
+},table=>[
+  index("reach_events_project_created_idx").on(table.projectId,table.createdAt),
+  index("reach_events_project_campaign_idx").on(table.projectId,table.campaignSlug,table.eventType),
+  index("reach_events_project_visitor_idx").on(table.projectId,table.visitorId)
 ]);
