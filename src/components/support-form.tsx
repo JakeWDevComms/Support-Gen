@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useMemo,useState } from "react";
+import { useEffect,useMemo,useState } from "react";
 import { buildMailto } from "@/lib/mailto";
 import { generateLetter } from "@/lib/letter";
 import { isValidUKPostcode,normalisePostcode } from "@/lib/postcode";
 import type { ProjectConfig } from "@/projects/types";
 
-type Tracking={utmSource?:string;utmMedium?:string;utmCampaign?:string;utmContent?:string;utmTerm?:string};
+type Tracking={utmSource?:string;utmMedium?:string;utmCampaign?:string;utmContent?:string;utmTerm?:string;reachCampaign?:string};
 
 export function SupportForm({project,tracking}:{project:ProjectConfig;tracking:Tracking}){
  const [name,setName]=useState(""),[email,setEmail]=useState(""),[address,setAddress]=useState(""),[postcode,setPostcode]=useState("");
@@ -15,6 +15,15 @@ export function SupportForm({project,tracking}:{project:ProjectConfig;tracking:T
  const normalisedPostcode=normalisePostcode(postcode);
  const valid=name.trim().length>=2&&/\S+@\S+\.\S+/.test(email)&&address.trim().length>=8&&isValidUKPostcode(postcode)&&hasContent&&privacyConsent;
  const letter=useMemo(()=>hasContent?generateLetter(project,{name:name||"Your name",address:address||"Your address",postcode:normalisedPostcode||"Your postcode",benefitIds,comment}):"",[project,name,address,normalisedPostcode,benefitIds,comment,hasContent]);
+ useEffect(()=>{
+   if(!tracking.reachCampaign&&!tracking.utmCampaign)return;
+   void fetch("/api/reach/events",{method:"POST",headers:{"content-type":"application/json"},keepalive:true,body:JSON.stringify({
+     projectSlug:project.slug,
+     campaignSlug:tracking.reachCampaign,
+     eventType:"tool_start",
+     tracking:{...tracking,referrer:document.referrer||undefined}
+   })}).catch(()=>{});
+ },[]);
  function toggleBenefit(id:string){setBenefitIds(current=>current.includes(id)?current.filter(v=>v!==id):[...current,id]);}
  async function logAction(action:"copy"|"email"){try{await fetch("/api/actions",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({projectSlug:project.slug,action,name,email,address,postcode:normalisedPostcode,benefitIds,comment,privacyConsent,marketingOptIn,honeypot,tracking:{...tracking,referrer:document.referrer||undefined}})});}catch{}}
  async function copyLetter(){if(!valid||!letter)return;setBusy(true);await logAction("copy");await navigator.clipboard.writeText(letter);setMessage("Your letter has been copied to your clipboard.");setBusy(false);}
