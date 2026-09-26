@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import { generateText } from "ai";
 import { NextResponse } from "next/server";
 import { getProject } from "@/lib/projects";
 
@@ -78,13 +78,13 @@ Return ONLY valid JSON with this exact shape:
 }
 `;
 
-  const response=await client.responses.create({
-    model:"gpt-5.6",
-    input:prompt
+  const {text}=await generateText({
+    model:"openai/gpt-5.6",
+    prompt
   });
 
   try{
-    return NextResponse.json(extractJson(response.output_text));
+    return NextResponse.json(extractJson(text));
   }catch(error){
     return NextResponse.json({error:error instanceof Error?error.message:"Could not generate campaign pack."},{status:502});
   }
