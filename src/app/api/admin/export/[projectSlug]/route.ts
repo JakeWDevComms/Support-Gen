@@ -7,7 +7,7 @@ import { getProject } from "@/lib/projects";
 function csv(value:unknown){const text=value==null?"":Array.isArray(value)?value.join("|"):String(value);return `"${text.replaceAll('"','""')}"`;}
 
 export async function GET(_:Request,{params}:{params:Promise<{projectSlug:string}>}){
- const {projectSlug}=await params,project=getProject(projectSlug);
+ const {projectSlug}=await params,project=await getProject(projectSlug);
  if(!project)return NextResponse.json({error:"Unknown project"},{status:404});
 
  const rows=process.env.DATABASE_URL
