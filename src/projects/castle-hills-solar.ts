@@ -8,10 +8,16 @@ export const castleHillsSolar: ProjectConfig = {
   dataProcessor:"DevComms",
   schemeName:"Castle Hills Solar Farm",
   location:"Solihull",
-  pitch:"Share your own reasons for supporting the Castle Hills Solar Farm planning application.",
+  pitch:"Castle Hills Solar Farm campaign creative and paid-social planning workspace.",
   applicationReference:"PL/2025/01404/PPFL",
   planningAuthority:{name:"Solihull Metropolitan Borough Council",to:["planning@solihull.gov.uk"],cc:[]},
   theme:{primary:"#006f78",primaryDark:"#083f47",accent:"#e9b83f",background:"#f5f8f6"},
+  campaign:{
+    projectType:"renewables",
+    destinationUrl:"https://castlehillssolarfarm.co.uk/",
+    targetArea:"Solihull and nearby communities around the application site",
+    audienceNotes:"Keep the audience broad and local. Do not use political affiliation, protected characteristics or sensitive-interest targeting."
+  },
   benefits:[
     {id:"clean-energy",label:"Enough clean electricity for around 14,000 homes in the West Midlands",phrasings:[
       "I support the amount of clean electricity the scheme could generate, equivalent to the annual needs of around 14,000 homes in the West Midlands.",
