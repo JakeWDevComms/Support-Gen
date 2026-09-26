@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo,useState } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import type { ProjectConfig,SupportBenefit } from "@/projects/types";
 
@@ -328,7 +329,7 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
   </div>;
 }
 
-function Section({number,title,description,children}:{number:string;title:string;description:string;children:React.ReactNode}){
+function Section({number,title,description,children}:{number:string;title:string;description:string;children:ReactNode}){
   return <section className="rounded-[26px] bg-white p-6 shadow-[0_12px_34px_rgba(20,53,57,.06)] ring-1 ring-black/[0.04] md:p-7">
     <div className="mb-6 flex gap-4">
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e7f2ef] text-xs font-black text-[#006f78]">{number}</span>
@@ -337,6 +338,6 @@ function Section({number,title,description,children}:{number:string;title:string
     <div className="space-y-4">{children}</div>
   </section>;
 }
-function Field({label,children}:{label:string;children:React.ReactNode}){return <label className="block text-sm font-semibold text-[#40575c]">{label}{children}</label>;}
+function Field({label,children}:{label:string;children:ReactNode}){return <label className="block text-sm font-semibold text-[#40575c]">{label}{children}</label>;}
 function Colour({label,value,onChange}:{label:string;value:string;onChange:(value:string)=>void}){return <label className="text-sm font-semibold text-[#40575c]">{label}<div className="mt-2 flex items-center gap-2 rounded-xl border border-[#d5dfdc] bg-white p-2"><input type="color" value={value} onChange={e=>onChange(e.target.value)} className="h-9 w-10 cursor-pointer rounded border-0 bg-transparent"/><input value={value} onChange={e=>onChange(e.target.value)} className="min-w-0 flex-1 text-xs font-mono uppercase outline-none"/></div></label>;}
 function Summary({label,value}:{label:string;value:string}){return <div className="flex items-start justify-between gap-4"><span className="text-white/55">{label}</span><strong className="text-right font-semibold">{value}</strong></div>;}
