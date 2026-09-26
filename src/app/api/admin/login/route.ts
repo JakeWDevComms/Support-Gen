@@ -1,0 +1,3 @@
+import { NextResponse } from "next/server";
+import { adminCookie,createAdminSession,validAdminPassword } from "@/lib/auth";
+export async function POST(request:Request){const form=await request.formData(),password=String(form.get("password")??""),next=String(form.get("next")??"/"),target=next.startsWith("/admin/")?next:"/";if(!validAdminPassword(password))return NextResponse.redirect(new URL(`${target}?login=failed`,request.url),{status:303});const response=NextResponse.redirect(new URL(target,request.url),{status:303});response.cookies.set(adminCookie.name,createAdminSession(),{httpOnly:true,sameSite:"lax",secure:process.env.NODE_ENV==="production",path:"/",maxAge:adminCookie.maxAge});return response;}
