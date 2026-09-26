@@ -15,7 +15,7 @@ export default async function Home(){
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-lg font-black ring-1 ring-white/15">D</div>
             <p className="mt-5 text-xs font-bold uppercase tracking-[0.18em] text-white/60">DevComms campaign tools</p>
             <h1 className="mt-2 text-4xl font-bold tracking-[-0.035em] md:text-5xl">Support Gen</h1>
-            <p className="mt-4 max-w-2xl text-lg leading-8 text-white/72">Create, run and report on planning-support campaigns from one reusable system.</p>
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-white/72">Create project-specific paid-social creative, captions, targeting plans and campaign assets from one reusable system.</p>
           </div>
           <Link href="/admin/projects/new" className="inline-flex shrink-0 items-center justify-center rounded-xl bg-white px-5 py-3.5 font-bold text-[#0b3f47] shadow-sm transition hover:-translate-y-0.5">+ New project</Link>
         </div>
@@ -46,15 +46,13 @@ export default async function Home(){
 
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               <Mini label="Application" value={project.applicationReference}/>
-              <Mini label="Support reasons" value={String(project.benefits.length)}/>
-              <Mini label="Reach" value={project.reach?"Enabled":"Off"}/>
+              <Mini label="Campaign facts" value={String(project.benefits.length)}/>
+              <Mini label="Project type" value={project.campaign?.projectType??"Not set"}/>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-2.5 bg-[#fbfcfc] p-5 md:px-7">
-            <Link href={`/${project.slug}`} className="rounded-xl bg-[#006f78] px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5">Public page</Link>
-            <Link href={`/admin/${project.slug}`} className="rounded-xl border border-[#cbd8d4] bg-white px-4 py-2.5 text-sm font-bold text-[#30494e]">Support dashboard</Link>
-            {project.reach?<Link href={`/admin/${project.slug}/reach`} className="rounded-xl border border-[#cbd8d4] bg-white px-4 py-2.5 text-sm font-bold text-[#30494e]">Reach</Link>:null}
+            <Link href={`/admin/${project.slug}/ads`} className="rounded-xl bg-[#006f78] px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5">Open Ad Studio</Link>
             <Link href={`/admin/projects/${project.slug}/edit`} className="ml-auto rounded-xl border border-[#cbd8d4] bg-white px-4 py-2.5 text-sm font-bold text-[#30494e]">Edit project</Link>
           </div>
         </article>)}
@@ -64,7 +62,7 @@ export default async function Home(){
 
       <div className="mt-6 flex flex-col gap-2 rounded-2xl border border-[#dce5e2] bg-white/65 px-5 py-4 text-sm text-[#607174] sm:flex-row sm:items-center sm:justify-between">
         <span>Build mode · admin authentication temporarily disabled</span>
-        <span>Routine projects can now be configured from the UI rather than GitHub.</span>
+        <span>Create the project once, then generate and iterate campaign creative from the Ad Studio.</span>
       </div>
     </div>
   </main>;
