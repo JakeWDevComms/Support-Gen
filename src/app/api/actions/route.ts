@@ -15,7 +15,7 @@ const schema=z.object({
 export async function POST(request:Request){
  const parsed=schema.safeParse(await request.json());if(!parsed.success)return NextResponse.json({error:"Invalid submission"},{status:400});
  const input=parsed.data;if(input.honeypot)return new NextResponse(null,{status:204});
- const project=getProject(input.projectSlug);if(!project)return NextResponse.json({error:"Unknown project"},{status:404});
+ const project=await getProject(input.projectSlug);if(!project)return NextResponse.json({error:"Unknown project"},{status:404});
  if(!isValidUKPostcode(input.postcode))return NextResponse.json({error:"Invalid postcode"},{status:400});
  if(input.benefitIds.length===0&&input.comment.trim().length===0)return NextResponse.json({error:"Choose a reason or add a comment"},{status:400});
  const allowed=new Set(project.benefits.map(b=>b.id));if(input.benefitIds.some(id=>!allowed.has(id)))return NextResponse.json({error:"Invalid benefit"},{status:400});
