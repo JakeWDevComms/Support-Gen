@@ -8,6 +8,7 @@ export type ReachCampaign = {
   slug: string;
   name: string;
   channel: string;
+  journey?: "direct" | "landing";
   headline?: string;
   intro?: string;
   source: string;
