@@ -69,6 +69,7 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
   const [privacyEmail,setPrivacyEmail]=useState(initial?.privacy.contactEmail??"");
   const [status,setStatus]=useState<"draft"|"live">("draft");
   const [reachEnabled,setReachEnabled]=useState(Boolean(initial?.reach));
+  const [reachJourney,setReachJourney]=useState<"direct"|"landing">(initial?.reach?.campaigns?.[0]?.journey==="landing"?"landing":"direct");
   const [reachHeadline,setReachHeadline]=useState(initial?.reach?.headline??"");
   const [reachIntro,setReachIntro]=useState(initial?.reach?.intro??"");
   const [learnMoreUrl,setLearnMoreUrl]=useState(initial?.reach?.learnMoreUrl??"");
@@ -178,11 +179,11 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
         learnMoreUrl:learnMoreUrl||undefined,
         keyPoints:cleanBenefits.slice(0,3).map(item=>item.label),
         campaigns:[
-          {slug:"facebook-local",name:"Facebook – local audience",channel:"Meta",source:"facebook",medium:"paid_social",campaign:`${s}-facebook-local`},
-          {slug:"instagram-local",name:"Instagram – local audience",channel:"Meta",source:"instagram",medium:"paid_social",campaign:`${s}-instagram-local`},
-          {slug:"leaflet-qr",name:"Leaflet QR",channel:"Print",source:"leaflet",medium:"qr",campaign:`${s}-leaflet`},
-          {slug:"client-website",name:"Client website",channel:"Website",source:"client-website",medium:"referral",campaign:`${s}-client-website`},
-          {slug:"organic-social",name:"Organic social",channel:"Social",source:"organic-social",medium:"social",campaign:`${s}-organic`}
+          {slug:"facebook-local",name:"Facebook – local audience",channel:"Meta",journey:reachJourney,source:"facebook",medium:"paid_social",campaign:`${s}-facebook-local`},
+          {slug:"instagram-local",name:"Instagram – local audience",channel:"Meta",journey:reachJourney,source:"instagram",medium:"paid_social",campaign:`${s}-instagram-local`},
+          {slug:"leaflet-qr",name:"Leaflet QR",channel:"Print",journey:reachJourney,source:"leaflet",medium:"qr",campaign:`${s}-leaflet`},
+          {slug:"client-website",name:"Client website",channel:"Website",journey:reachJourney,source:"client-website",medium:"referral",campaign:`${s}-client-website`},
+          {slug:"organic-social",name:"Organic social",channel:"Social",journey:reachJourney,source:"organic-social",medium:"social",campaign:`${s}-organic`}
         ]
       }:undefined,
       consultationCloses:consultationCloses||undefined,
@@ -277,12 +278,27 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
         <Field label="Logo URL"><input className={field} value={logoUrl} onChange={e=>setLogoUrl(e.target.value)} placeholder="https://..."/></Field>
       </Section>
 
-      <Section number="05" title="Reach module" description="Optional tracked campaign landing pages for ads, leaflets and outreach.">
+      <Section number="05" title="Reach module" description="Tracked campaign links for Facebook, Instagram, leaflets, websites and other outreach.">
         <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-[#dce5e2] bg-[#f8fbfa] p-4">
           <input type="checkbox" className="h-5 w-5 accent-[#006f78]" checked={reachEnabled} onChange={e=>setReachEnabled(e.target.checked)}/>
           <span><strong>Enable Reach for this project</strong><span className="mt-1 block text-sm text-[#6d7d80]">Creates standard Facebook, Instagram, leaflet, website and organic tracked routes.</span></span>
         </label>
         {reachEnabled?<div className="mt-5 space-y-4">
+          <div>
+            <p className="text-sm font-semibold text-[#40575c]">Campaign journey</p>
+            <div className="mt-2 grid gap-3 md:grid-cols-2">
+              <label className={`cursor-pointer rounded-2xl border p-4 transition ${reachJourney==="direct"?"border-[#006f78] bg-[#eef8f6]":"border-[#dce5e2] bg-white"}`}>
+                <input type="radio" name="reachJourney" value="direct" checked={reachJourney==="direct"} onChange={()=>setReachJourney("direct")} className="mr-2 accent-[#006f78]"/>
+                <strong>Direct to support tool</strong>
+                <span className="mt-1 block text-sm font-normal leading-6 text-[#6d7d80]">Best for the Clyst/Castle Hills model: the ad or QR link opens the survey/letter generator immediately.</span>
+              </label>
+              <label className={`cursor-pointer rounded-2xl border p-4 transition ${reachJourney==="landing"?"border-[#006f78] bg-[#eef8f6]":"border-[#dce5e2] bg-white"}`}>
+                <input type="radio" name="reachJourney" value="landing" checked={reachJourney==="landing"} onChange={()=>setReachJourney("landing")} className="mr-2 accent-[#006f78]"/>
+                <strong>Campaign landing page first</strong>
+                <span className="mt-1 block text-sm font-normal leading-6 text-[#6d7d80]">Optional for campaigns where you want a short explainer before the resident enters the support tool.</span>
+              </label>
+            </div>
+          </div>
           <Field label="Reach headline"><input className={field} value={reachHeadline} onChange={e=>setReachHeadline(e.target.value)} placeholder={`Support ${schemeName||"the proposals"}`}/></Field>
           <Field label="Reach introduction"><textarea rows={3} className={field} value={reachIntro} onChange={e=>setReachIntro(e.target.value)} placeholder="Short factual introduction to the campaign."/></Field>
           <Field label="Learn more URL"><input className={field} value={learnMoreUrl} onChange={e=>setLearnMoreUrl(e.target.value)} placeholder="https://projectwebsite.co.uk/"/></Field>
@@ -308,7 +324,7 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
           <Summary label="Client" value={clientName||"Not set"}/>
           <Summary label="Application" value={applicationReference||"Not set"}/>
           <Summary label="Support reasons" value={String(config.benefits.length)}/>
-          <Summary label="Reach" value={reachEnabled?"Enabled":"Off"}/>
+          <Summary label="Reach" value={reachEnabled?(reachJourney==="direct"?"Direct to tool":"Landing first"):"Off"}/>
         </div>
 
         <label className="mt-5 block text-sm font-semibold">Project status
