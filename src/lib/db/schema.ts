@@ -1,4 +1,5 @@
-import { boolean,index,jsonb,pgTable,text,timestamp,uuid } from "drizzle-orm/pg-core";
+import { boolean,index,jsonb,pgTable,text,timestamp,uniqueIndex,uuid } from "drizzle-orm/pg-core";
+import type { ProjectConfig } from "@/projects/types";
 
 export const submissions=pgTable("submissions",{
   id:uuid("id").defaultRandom().primaryKey(),
@@ -41,4 +42,17 @@ export const reachEvents=pgTable("reach_events",{
   index("reach_events_project_created_idx").on(table.projectId,table.createdAt),
   index("reach_events_project_campaign_idx").on(table.projectId,table.campaignSlug,table.eventType),
   index("reach_events_project_visitor_idx").on(table.projectId,table.visitorId)
+]);
+
+
+export const projectConfigs=pgTable("project_configs",{
+  id:uuid("id").defaultRandom().primaryKey(),
+  createdAt:timestamp("created_at",{withTimezone:true}).defaultNow().notNull(),
+  updatedAt:timestamp("updated_at",{withTimezone:true}).defaultNow().notNull(),
+  slug:text("slug").notNull(),
+  status:text("status").default("draft").notNull(),
+  config:jsonb("config").$type<ProjectConfig>().notNull()
+},table=>[
+  uniqueIndex("project_configs_slug_unique").on(table.slug),
+  index("project_configs_status_idx").on(table.status)
 ]);
