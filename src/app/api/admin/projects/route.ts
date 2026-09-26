@@ -23,7 +23,7 @@ const configSchema=z.object({
   applicationReference:z.string().min(2),
   planningAuthority:z.object({
     name:z.string().min(2),
-    to:z.array(z.string().email()).min(1),
+    to:z.array(z.string().email()),
     cc:z.array(z.string().email()).optional()
   }),
   theme:z.object({
@@ -33,6 +33,12 @@ const configSchema=z.object({
     background:z.string().min(4),
     logoUrl:z.string().url().optional().or(z.literal(""))
   }),
+  campaign:z.object({
+    projectType:z.enum(["residential","employment","renewables","infrastructure","mixed","other"]).optional(),
+    destinationUrl:z.string().url().optional(),
+    targetArea:z.string().optional(),
+    audienceNotes:z.string().optional()
+  }).optional(),
   benefits:z.array(benefit).min(1),
   letter:z.object({
     salutations:z.array(z.string()).min(1),
