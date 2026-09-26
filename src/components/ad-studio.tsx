@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from "react";\nimport type { ReactNode } from "react";
 import Link from "next/link";
 import type { ProjectConfig } from "@/projects/types";
 
@@ -219,7 +219,7 @@ export function AdStudio({project,aiReady}:{project:ProjectConfig;aiReady:boolea
   </div>;
 }
 
-function Panel({title,children}:{title:string;children:React.ReactNode}){return <section className="rounded-[26px] bg-white p-6 shadow-[0_12px_34px_rgba(20,53,57,.06)] ring-1 ring-black/[0.04] md:p-7"><h2 className="text-xl font-bold tracking-tight text-[#173136]">{title}</h2><div className="mt-5 space-y-4">{children}</div></section>;}
+function Panel({title,children}:{title:string;children:ReactNode}){return <section className="rounded-[26px] bg-white p-6 shadow-[0_12px_34px_rgba(20,53,57,.06)] ring-1 ring-black/[0.04] md:p-7"><h2 className="text-xl font-bold tracking-tight text-[#173136]">{title}</h2><div className="mt-5 space-y-4">{children}</div></section>;}
 function Info({label,value}:{label:string;value:string}){return <div><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#849193]">{label}</p><p className="mt-1 text-sm leading-6 text-[#40575c]">{value}</p></div>;}
 function Row({label,value}:{label:string;value:string}){return <div><p className="text-[10px] font-bold uppercase tracking-[0.11em] text-[#8a9799]">{label}</p><p className="mt-1 break-words font-semibold leading-5 text-[#40575c]">{value}</p></div>;}
 function CopyBlock({title,text,onCopy,copied}:{title:string;text:string;onCopy:()=>void;copied:boolean}){return <div><div className="flex items-center justify-between gap-3"><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#849193]">{title}</p><button onClick={onCopy} className="text-xs font-bold text-[#006f78]">{copied?"Copied":"Copy"}</button></div><p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-[#344d52]">{text}</p></div>;}
