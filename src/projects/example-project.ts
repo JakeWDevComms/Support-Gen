@@ -37,8 +37,18 @@ export const exampleProject: ProjectConfig = {
   },
   letter:{
     salutations:["Dear Planning Officer,"],
-    openings:["I am writing about SCHEME NAME, application APPLICATION REFERENCE."],
-    closings:["Please take my comments into account when the application is determined."],
+    openings:[
+      "I am writing about SCHEME NAME, application APPLICATION REFERENCE.",
+      "Please accept this as my representation on SCHEME NAME, reference APPLICATION REFERENCE."
+    ],
+    transitions:[
+      "There are other aspects of the proposal that I also support.",
+      "A further point that matters to me is set out below."
+    ],
+    closings:[
+      "Please take my comments into account when the application is determined.",
+      "I would be grateful if my comments could be considered as part of the decision."
+    ],
     subject:"Representation on SCHEME NAME – APPLICATION REFERENCE"
   },
   consultationCloses:"2027-01-31",
