@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -92,5 +93,5 @@ export default async function ReachAdminPage({params}:{params:Promise<{projectSl
 }
 
 function Stat({label,value}:{label:string;value:number}){return <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5"><div className="text-sm text-[#657376]">{label}</div><div className="mt-2 text-4xl font-bold text-[#083f47]">{value}</div></div>;}
-function Th({children}:{children:React.ReactNode}){return <th className="px-5 py-4 font-bold">{children}</th>;}
-function Td({children}:{children:React.ReactNode}){return <td className="px-5 py-4 align-top">{children}</td>;}
+function Th({children}:{children:ReactNode}){return <th className="px-5 py-4 font-bold">{children}</th>;}
+function Td({children}:{children:ReactNode}){return <td className="px-5 py-4 align-top">{children}</td>;}
