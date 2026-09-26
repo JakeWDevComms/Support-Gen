@@ -37,7 +37,10 @@ export function ReachLinkBuilder({project}:{project:ProjectConfig}){
     return url.toString();
   },[project.slug,project.campaign?.destinationUrl,source,medium,campaign]);
 
-  function absolute(path:string){return /^https?:\/\//i.test(path)?path:`${window.location.origin}${path}`;}\n\n  async function copy(path:string,key:string){\n    await navigator.clipboard.writeText(absolute(path));
+  function absolute(path:string){return /^https?:\/\//i.test(path)?path:`${window.location.origin}${path}`;}
+
+  async function copy(path:string,key:string){
+    await navigator.clipboard.writeText(absolute(path));
     setCopied(key);
     window.setTimeout(()=>setCopied(null),1800);
   }
