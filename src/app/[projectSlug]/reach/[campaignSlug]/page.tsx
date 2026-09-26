@@ -4,7 +4,7 @@ import { ReachLanding } from "@/components/reach-landing";
 import { getProject } from "@/lib/projects";
 
 export default async function ReachCampaignPage({params}:{params:Promise<{projectSlug:string;campaignSlug:string}>}){
-  const {projectSlug,campaignSlug}=await params,project=getProject(projectSlug);
+  const {projectSlug,campaignSlug}=await params,project=await getProject(projectSlug);
   if(!project?.reach)notFound();
   const campaign=project.reach.campaigns.find(item=>item.slug===campaignSlug);
   if(!campaign)notFound();
