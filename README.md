@@ -8,12 +8,14 @@ One Next.js App Router codebase serves projects from typed config files in `src/
 
 - `/[projectSlug]` — resident form, live preview, copy and open-in-email actions.
 - `/[projectSlug]/privacy` — project-specific privacy statement.
-- `/admin/[projectSlug]` — password-protected reporting dashboard.
+- `/[projectSlug]/reach/[campaignSlug]` — tracked campaign landing page.
+- `/admin/[projectSlug]` — password-protected supporter dashboard.
+- `/admin/[projectSlug]/reach` — campaign links, QR downloads and source conversion dashboard.
 - `src/projects/*.ts` — all client/project content and branding.
 - `src/lib/db` — Neon Postgres + Drizzle schema.
 - `src/app/api/actions` — submission/action capture and abuse controls.
 
-Adding a campaign means copying `src/projects/example-project.ts`, filling in the config, and adding it to `src/lib/projects.ts`. The resident UI and admin dashboard do not need to be rewritten.
+Adding a campaign means copying `src/projects/example-project.ts`, filling in the config, and adding it to `src/lib/projects.ts`. The resident UI and admin dashboards do not need to be rewritten. The optional `reach` block defines campaign landing-page copy and channel-specific tracked routes.
 
 ## Database choice
 
@@ -56,7 +58,7 @@ npm install
 npm run db:push
 ```
 
-Drizzle will create the `submissions` table and indexes from `src/lib/db/schema.ts`.
+Drizzle will create the `submissions` and `reach_events` tables and their indexes from `src/lib/db/schema.ts`.
 
 ## Vercel deployment
 
@@ -98,3 +100,36 @@ V1 limits one hashed IP to 10 recorded actions in 15 minutes and includes a hone
 The project privacy page is generated from config. Castle Hills currently uses a configurable `legitimate interests` basis for the core tool and consent for the separate email-update opt-in. **TotalEnergies should confirm the Article 6 basis and its documented Legitimate Interests Assessment with its data-protection lead before public launch.**
 
 CSV exports contain personal data and should be treated as restricted project information.
+
+
+## Reach module
+
+Projects can optionally define a `reach` block. Each configured campaign creates a route such as:
+
+```
+/castle-hills-solar/reach/facebook-local
+/castle-hills-solar/reach/leaflet-qr
+```
+
+The landing page gives a short factual introduction, lets the visitor choose whether to continue into the representation tool, and records anonymous first-party funnel events.
+
+The Reach dashboard at `/admin/[projectSlug]/reach` provides:
+
+- one-click campaign URLs;
+- downloadable high-resolution QR PNGs for print;
+- a custom tracked-link builder;
+- unique landing visitors;
+- unique support clicks;
+- unique tool starts;
+- unique supporters attributed to each campaign;
+- conversion rate by campaign/source.
+
+Anonymous Reach activity is stored separately from personal supporter records. A 30-day first-party pseudonymous visitor identifier is used to deduplicate funnel events. Raw IP addresses are not stored.
+
+### Paid media
+
+Support Gen currently measures the journey **after somebody reaches a campaign link**. It does not yet read impressions, paid reach or spend from Meta/Google ad accounts. Those integrations can be added later to calculate CTR, cost per visit and cost per unique supporter.
+
+### Message testing
+
+Campaign entries can override the default `headline` and `intro`. This lets DevComms create separate factual variants for different channels or tests while keeping the underlying scheme configuration and reporting in one project.
