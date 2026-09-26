@@ -38,6 +38,26 @@ export const castleHillsSolar: ProjectConfig = {
       "The long-term Community Benefit Fund is another positive part of the proposal, particularly because the annual £40,000 contribution would be indexed to inflation."
     ]}
   ],
+  reach:{
+    eyebrow:"Castle Hills Solar Farm",
+    headline:"Support clean energy and long-term local benefits in Solihull",
+    intro:"Castle Hills Solar Farm would generate renewable electricity alongside significant biodiversity improvements and a long-term Community Benefit Fund. If you support the proposals, you can share the reasons that matter to you with Solihull Council.",
+    supportCta:"Yes, I support the proposals",
+    learnMoreCta:"I'd like to know more",
+    learnMoreUrl:"https://castlehillssolarfarm.co.uk/",
+    keyPoints:[
+      "Renewable electricity equivalent to the annual needs of around 14,000 homes",
+      "Significant new habitat, planting and biodiversity improvements",
+      "A £40,000 annual Community Benefit Fund, indexed to inflation"
+    ],
+    campaigns:[
+      {slug:"facebook-local",name:"Facebook – local audience",channel:"Meta",source:"facebook",medium:"paid_social",campaign:"castle-hills-facebook-local"},
+      {slug:"instagram-local",name:"Instagram – local audience",channel:"Meta",source:"instagram",medium:"paid_social",campaign:"castle-hills-instagram-local"},
+      {slug:"leaflet-qr",name:"Leaflet QR",channel:"Print",source:"leaflet",medium:"qr",campaign:"castle-hills-leaflet"},
+      {slug:"client-website",name:"Castle Hills website",channel:"Website",source:"castle-hills-website",medium:"referral",campaign:"castle-hills-client-website"},
+      {slug:"organic-social",name:"Organic social",channel:"Social",source:"organic-social",medium:"social",campaign:"castle-hills-organic"}
+    ]
+  },
   letter:{
     salutations:["Dear Planning Officer,","Dear Development Management Team,"],
     openings:[
