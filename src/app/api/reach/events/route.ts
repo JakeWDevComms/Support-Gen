@@ -26,7 +26,7 @@ const schema=z.object({
 export async function POST(request:Request){
   const parsed=schema.safeParse(await request.json());
   if(!parsed.success)return NextResponse.json({error:"Invalid event"},{status:400});
-  const input=parsed.data,project=getProject(input.projectSlug);
+  const input=parsed.data,project=await getProject(input.projectSlug);
   if(!project)return NextResponse.json({error:"Unknown project"},{status:404});
 
   const configured=input.campaignSlug?project.reach?.campaigns.find(c=>c.slug===input.campaignSlug):undefined;
