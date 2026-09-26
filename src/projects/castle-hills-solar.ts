@@ -70,8 +70,7 @@ export const castleHillsSolar: ProjectConfig = {
       "I would be grateful if my comments could be considered as part of the Council's assessment of the application.",
       "Please include these comments among the representations considered when the application is determined."
     ],
-    subject:"Support for Castle Hills Solar Farm – PL/2025/01404/PPFL",
-    transparencyLine:"I used an online drafting tool to help prepare this representation; the selections and comments above reflect my own views."
+    subject:"Support for Castle Hills Solar Farm – PL/2025/01404/PPFL"
   },
   retentionMonths:18,
   privacy:{coreLawfulBasis:"legitimate interests",legitimateInterest:"operating the representation tool, understanding community views on the planning application, preventing abuse and preparing aggregated project reporting"},
