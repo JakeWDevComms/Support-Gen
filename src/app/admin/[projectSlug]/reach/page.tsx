@@ -10,7 +10,7 @@ import { ReachLinkBuilder } from "@/components/reach-link-builder";
 const pct=(n:number,d:number)=>d?Math.round((n/d)*100):0;
 
 export default async function ReachAdminPage({params}:{params:Promise<{projectSlug:string}>}){
-  const {projectSlug}=await params,project=getProject(projectSlug);
+  const {projectSlug}=await params,project=await getProject(projectSlug);
   if(!project?.reach)notFound();
   const [events,actions]=process.env.DATABASE_URL
     ? await Promise.all([
