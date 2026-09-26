@@ -51,10 +51,10 @@ export default async function ReachAdminPage({params}:{params:Promise<{projectSl
   const totalStarts=new Set(events.filter(e=>e.eventType==="tool_start").map(e=>e.visitorId)).size;
   const totalSupporters=new Set(reachActions.map(a=>a.supporterFingerprint)).size;
 
-  return <main className="min-h-screen bg-[#eef3f1] px-5 py-8 md:px-8"><div className="mx-auto max-w-7xl"><div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"><strong>Build mode:</strong> admin login is temporarily disabled while Support Gen is being developed.</div>
-    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-      <div><p className="text-sm font-bold uppercase tracking-[0.16em] text-[#006f78]">Support Gen · Reach</p><h1 className="mt-2 text-4xl font-bold">{project.schemeName}</h1><p className="mt-2 text-[#657376]">Campaign entry points and conversion reporting</p></div>
-      <div className="flex flex-wrap gap-3"><Link href="/" className="rounded-xl border border-[#c8d4d1] bg-white px-4 py-3 font-bold">Home</Link><Link href={`/admin/${project.slug}`} className="rounded-xl border border-[#c8d4d1] bg-white px-4 py-3 font-bold">Support dashboard</Link></div>
+  return <main className="min-h-screen bg-[#eef4f1] px-5 py-8 md:px-8 md:py-10"><div className="mx-auto max-w-7xl"><div className="rounded-2xl border border-amber-200/80 bg-amber-50/80 px-4 py-3 text-sm text-amber-900 shadow-sm"><strong>Build mode:</strong> admin login is temporarily disabled while Support Gen is being developed.</div>
+    <div className="mt-6 rounded-[28px] bg-[#0b3f47] px-6 py-7 text-white shadow-[0_18px_50px_rgba(16,58,64,.13)] md:flex md:items-end md:justify-between md:gap-6 md:px-8">
+      <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">Support Gen · Reach</p><h1 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">{project.schemeName}</h1><p className="mt-2 text-white/65">Campaign entry points and conversion reporting</p></div>
+      <div className="mt-5 flex flex-wrap gap-2.5 md:mt-0"><Link href="/" className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 font-bold text-white transition hover:bg-white/15">Home</Link><Link href={`/admin/${project.slug}`} className="rounded-xl bg-white px-4 py-3 font-bold text-[#0b3f47] transition hover:-translate-y-0.5">Support dashboard</Link></div>
     </div>
 
 {!process.env.DATABASE_URL?<div className="mt-6 rounded-2xl border border-[#d8e1de] bg-white px-5 py-4 text-sm leading-6 text-[#536467]"><strong>Database not connected yet.</strong> Reach is shown in preview mode with zero values until Neon is connected.</div>:null}
@@ -66,12 +66,12 @@ export default async function ReachAdminPage({params}:{params:Promise<{projectSl
       <Stat label="Unique supporters" value={totalSupporters}/>
     </div>
 
-    <section className="mt-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5 md:p-8">
+    <section className="mt-6 rounded-[26px] bg-white p-6 shadow-[0_12px_34px_rgba(20,53,57,.06)] ring-1 ring-black/[0.04] md:p-8">
       <div className="mb-6"><h2 className="text-2xl font-bold">Campaign links</h2><p className="mt-2 text-sm leading-6 text-[#657376]">Use a different tracked link for each advert, leaflet, website or outreach channel. The resident sees a short project landing page before choosing whether to continue.</p></div>
       <ReachLinkBuilder project={project}/>
     </section>
 
-    <section className="mt-6 overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-black/5">
+    <section className="mt-6 overflow-hidden rounded-[26px] bg-white shadow-[0_12px_34px_rgba(20,53,57,.06)] ring-1 ring-black/[0.04]">
       <div className="border-b border-[#e2e8e6] p-6 md:p-8"><h2 className="text-2xl font-bold">Conversion by source</h2><p className="mt-2 text-sm text-[#657376]">Unique counts are used wherever possible so repeat clicks do not inflate the funnel.</p></div>
       <div className="overflow-x-auto">
         <table className="min-w-[880px] w-full text-left text-sm">
@@ -82,13 +82,13 @@ export default async function ReachAdminPage({params}:{params:Promise<{projectSl
       {rows.length===0?<p className="p-8 text-sm text-[#657376]">No Reach data yet.</p>:null}
     </section>
 
-    <section className="mt-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5 md:p-8">
+    <section className="mt-6 rounded-[26px] bg-white p-6 shadow-[0_12px_34px_rgba(20,53,57,.06)] ring-1 ring-black/[0.04] md:p-8">
       <h2 className="text-xl font-bold">What this funnel measures</h2>
       <p className="mt-3 max-w-4xl text-sm leading-6 text-[#657376]">Support Gen measures activity after somebody reaches one of these links. Paid-media impressions, reach and spend still live in the advertising platform. A later ad-account integration can add those figures so this dashboard can also report click-through rate, cost per visit and cost per unique supporter.</p>
     </section>
   </div></main>;
 }
 
-function Stat({label,value}:{label:string;value:number}){return <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5"><div className="text-sm text-[#657376]">{label}</div><div className="mt-2 text-4xl font-bold text-[#083f47]">{value}</div></div>;}
+function Stat({label,value}:{label:string;value:number}){return <div className="rounded-[24px] bg-white p-6 shadow-[0_12px_34px_rgba(20,53,57,.06)] ring-1 ring-black/[0.04]"><div className="text-xs font-bold uppercase tracking-[0.12em] text-[#7b898b]">{label}</div><div className="mt-3 text-4xl font-bold tracking-tight text-[#0b3f47]">{value}</div></div>;}
 function Th({children}:{children:ReactNode}){return <th className="px-5 py-4 font-bold">{children}</th>;}
 function Td({children}:{children:ReactNode}){return <td className="px-5 py-4 align-top">{children}</td>;}
