@@ -209,8 +209,8 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
       setMessage("The project editor is ready, but the database still needs connecting before projects can be saved.");
       return;
     }
-    if(!schemeName||!clientName||!applicationReference||!authorityName||!recipient||config.benefits.length===0){
-      setMessage("Complete the scheme, client, application, planning authority, recipient email and at least one support reason.");
+    if(!schemeName||!clientName||!applicationReference||!authorityName||config.benefits.length===0){
+      setMessage("Complete the scheme, client, application, planning authority and at least one approved campaign fact.");
       return;
     }
     setSaving(true);
@@ -270,7 +270,7 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
       <Section number="02" title="Planning context" description="Planning authority and application details used to keep campaign copy accurate.">
         <div className="grid gap-4 md:grid-cols-2">
           <Field label="Planning authority *"><input className={field} value={authorityName} onChange={e=>setAuthorityName(e.target.value)} placeholder="Council name"/></Field>
-          <Field label="Planning recipient email *"><input type="email" className={field} value={recipient} onChange={e=>setRecipient(e.target.value)} placeholder="planning@council.gov.uk"/></Field>
+          <Field label="Planning authority email (optional)"><input type="email" className={field} value={recipient} onChange={e=>setRecipient(e.target.value)} placeholder="planning@council.gov.uk (optional)"/></Field>
         </div>
         <Field label="CC addresses"><input className={field} value={cc} onChange={e=>setCc(e.target.value)} placeholder="reporting@devcomms.co.uk, client@example.com"/></Field>
       </Section>
