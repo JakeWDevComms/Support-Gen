@@ -39,7 +39,7 @@ export default async function AdminProjectPage({params}:{params:Promise<{project
      <p className="mt-2 text-white/65">{project.applicationReference}</p>
     </div>
     <div className="mt-5 flex flex-wrap gap-2.5 md:mt-0">
-     <Link href="/" className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 font-bold text-white transition hover:bg-white/15">Home</Link>
+     <Link href="/" className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 font-bold text-white transition hover:bg-white/15">Projects</Link><Link href={`/admin/projects/${project.slug}/edit`} className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 font-bold text-white transition hover:bg-white/15">Edit project</Link>
      {project.reach?<Link href={`/admin/${project.slug}/reach`} className="rounded-xl bg-white px-4 py-3 font-bold text-[#0b3f47] transition hover:-translate-y-0.5">Reach dashboard</Link>:null}
      <a href={`/api/admin/export/${project.slug}`} className="rounded-xl bg-[#0f737b] px-4 py-3 font-bold text-white ring-1 ring-white/10 transition hover:-translate-y-0.5">Export CSV</a>
     </div>
