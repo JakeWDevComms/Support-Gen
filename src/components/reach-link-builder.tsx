@@ -1,15 +1,41 @@
 "use client";
 import { useMemo,useState } from "react";
-import type { ProjectConfig } from "@/projects/types";
+import type { ProjectConfig,ReachCampaign } from "@/projects/types";
+
+function campaignPath(project:ProjectConfig,item:ReachCampaign){
+  if(item.journey==="landing")return `/${project.slug}/reach/${item.slug}`;
+  const q=new URLSearchParams({
+    utm_source:item.source,
+    utm_medium:item.medium,
+    utm_campaign:item.campaign,
+    reach_campaign:item.slug
+  });
+  if(item.content)q.set("utm_content",item.content);
+  return `/${project.slug}?${q.toString()}`;
+}
 
 export function ReachLinkBuilder({project}:{project:ProjectConfig}){
-  const [source,setSource]=useState("community-outreach"),[medium,setMedium]=useState("referral"),[campaign,setCampaign]=useState(`${project.slug}-custom`),[copied,setCopied]=useState<string|null>(null),[qrBusy,setQrBusy]=useState<string|null>(null);
+  const [source,setSource]=useState("community-outreach");
+  const [medium,setMedium]=useState("referral");
+  const [campaign,setCampaign]=useState(`${project.slug}-custom`);
+  const [copied,setCopied]=useState<string|null>(null);
+  const [qrBusy,setQrBusy]=useState<string|null>(null);
+
   const directPath=useMemo(()=>{
-    const q=new URLSearchParams({utm_source:source.trim()||"custom",utm_medium:medium.trim()||"referral",utm_campaign:campaign.trim()||`${project.slug}-custom`});
+    const q=new URLSearchParams({
+      utm_source:source.trim()||"custom",
+      utm_medium:medium.trim()||"referral",
+      utm_campaign:campaign.trim()||`${project.slug}-custom`
+    });
     return `/${project.slug}?${q.toString()}`;
   },[project.slug,source,medium,campaign]);
 
-  async function copy(path:string,key:string){await navigator.clipboard.writeText(`${window.location.origin}${path}`);setCopied(key);window.setTimeout(()=>setCopied(null),1800);}
+  async function copy(path:string,key:string){
+    await navigator.clipboard.writeText(`${window.location.origin}${path}`);
+    setCopied(key);
+    window.setTimeout(()=>setCopied(null),1800);
+  }
+
   async function downloadQr(path:string,key:string,name:string){
     setQrBusy(key);
     try{
@@ -20,16 +46,25 @@ export function ReachLinkBuilder({project}:{project:ProjectConfig}){
       a.href=dataUrl;
       a.download=`${name.replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"").toLowerCase()}-qr.png`;
       a.click();
-    }finally{setQrBusy(null);}
+    }finally{
+      setQrBusy(null);
+    }
   }
 
   return <div className="space-y-6">
     <div className="grid gap-3 md:grid-cols-2">
       {project.reach?.campaigns.map(item=>{
-        const path=`/${project.slug}/reach/${item.slug}`;
+        const path=campaignPath(project,item);
+        const direct=item.journey!=="landing";
         return <div key={item.slug} className="rounded-2xl border border-[#d8e1de] p-4">
           <div className="flex items-start justify-between gap-4">
-            <div><div className="text-xs font-bold uppercase tracking-[0.12em] text-[#6e7d80]">{item.channel}</div><div className="mt-1 font-bold">{item.name}</div></div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-[0.12em] text-[#6e7d80]">{item.channel}</span>
+                <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] ${direct?"bg-emerald-50 text-emerald-700":"bg-sky-50 text-sky-700"}`}>{direct?"Direct to tool":"Landing page"}</span>
+              </div>
+              <div className="mt-1 font-bold">{item.name}</div>
+            </div>
             <div className="flex shrink-0 gap-2">
               <button onClick={()=>copy(path,item.slug)} className="rounded-lg bg-[#083f47] px-3 py-2 text-xs font-bold text-white">{copied===item.slug?"Copied":"Copy URL"}</button>
               <button onClick={()=>downloadQr(path,item.slug,item.name)} disabled={qrBusy===item.slug} className="rounded-lg border border-[#cbd8d4] bg-white px-3 py-2 text-xs font-bold text-[#083f47] disabled:opacity-50">{qrBusy===item.slug?"Making…":"QR PNG"}</button>
@@ -42,7 +77,7 @@ export function ReachLinkBuilder({project}:{project:ProjectConfig}){
 
     <div className="rounded-2xl bg-[#f4f7f6] p-5">
       <h3 className="font-bold">Build a direct tracked link</h3>
-      <p className="mt-1 text-sm text-[#657376]">Useful for community groups, emails or one-off outreach that should go straight to the representation tool.</p>
+      <p className="mt-1 text-sm text-[#657376]">Useful for one-off ads, community groups, emails or outreach that should go straight into the representation tool.</p>
       <div className="mt-4 grid gap-3 md:grid-cols-3">
         <label className="text-sm font-semibold">Source<input value={source} onChange={e=>setSource(e.target.value)} className="mt-1 w-full rounded-lg border border-[#cbd8d4] bg-white px-3 py-2"/></label>
         <label className="text-sm font-semibold">Medium<input value={medium} onChange={e=>setMedium(e.target.value)} className="mt-1 w-full rounded-lg border border-[#cbd8d4] bg-white px-3 py-2"/></label>
