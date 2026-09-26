@@ -12,9 +12,6 @@ export async function POST(_:Request,{params}:{params:Promise<{projectSlug:strin
   const {projectSlug}=await params;
   const project=await getProject(projectSlug);
   if(!project)return NextResponse.json({error:"Unknown project"},{status:404});
-  if(!process.env.OPENAI_API_KEY)return NextResponse.json({error:"OPENAI_API_KEY is not configured yet."},{status:503});
-
-  const client=new OpenAI({apiKey:process.env.OPENAI_API_KEY});
   const facts=project.benefits.map((b,index)=>`${index+1}. ${b.label}`).join("\n");
   const campaign=project.campaign;
 
