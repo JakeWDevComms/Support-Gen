@@ -2,27 +2,22 @@ import type { ReactNode } from "react";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { isAdmin } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { reachEvents,submissions } from "@/lib/db/schema";
 import { getProject } from "@/lib/projects";
 import { ReachLinkBuilder } from "@/components/reach-link-builder";
-
-function Login({slug}:{slug:string}){return <main className="min-h-screen bg-[#eef3f1] px-5 py-16"><div className="mx-auto max-w-md rounded-3xl bg-white p-8 shadow-sm ring-1 ring-black/5"><p className="text-sm font-bold uppercase tracking-[0.16em] text-[#006f78]">Support Gen admin</p><h1 className="mt-3 text-3xl font-bold">Sign in</h1><form action="/api/admin/login" method="post" className="mt-6 space-y-4"><input type="hidden" name="next" value={`/admin/${slug}/reach`}/><input name="password" type="password" required className="w-full rounded-xl border border-[#cbd8d4] px-4 py-3" placeholder="Admin password"/><button className="w-full rounded-xl bg-[#083f47] px-5 py-3 font-bold text-white">Sign in</button></form></div></main>;}
 
 const pct=(n:number,d:number)=>d?Math.round((n/d)*100):0;
 
 export default async function ReachAdminPage({params}:{params:Promise<{projectSlug:string}>}){
   const {projectSlug}=await params,project=getProject(projectSlug);
   if(!project?.reach)notFound();
-  if(!(await isAdmin()))return <Login slug={projectSlug}/>;
-  if(!process.env.DATABASE_URL)return <main className="p-8"><h1 className="text-3xl font-bold">Reach · {project.schemeName}</h1><p className="mt-4">DATABASE_URL is not configured yet.</p></main>;
-
-  const db=getDb();
-  const [events,actions]=await Promise.all([
-    db.select().from(reachEvents).where(eq(reachEvents.projectId,project.id)),
-    db.select().from(submissions).where(eq(submissions.projectId,project.id))
-  ]);
+  const [events,actions]=process.env.DATABASE_URL
+    ? await Promise.all([
+        getDb().select().from(reachEvents).where(eq(reachEvents.projectId,project.id)),
+        getDb().select().from(submissions).where(eq(submissions.projectId,project.id))
+      ])
+    : [[],[]];
 
   const configuredByCampaign=new Map(project.reach.campaigns.map(c=>[c.campaign,c]));
   const campaignCodes=new Set<string>();
@@ -56,11 +51,13 @@ export default async function ReachAdminPage({params}:{params:Promise<{projectSl
   const totalStarts=new Set(events.filter(e=>e.eventType==="tool_start").map(e=>e.visitorId)).size;
   const totalSupporters=new Set(reachActions.map(a=>a.supporterFingerprint)).size;
 
-  return <main className="min-h-screen bg-[#eef3f1] px-5 py-8 md:px-8"><div className="mx-auto max-w-7xl">
+  return <main className="min-h-screen bg-[#eef3f1] px-5 py-8 md:px-8"><div className="mx-auto max-w-7xl"><div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"><strong>Build mode:</strong> admin login is temporarily disabled while Support Gen is being developed.</div>
     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div><p className="text-sm font-bold uppercase tracking-[0.16em] text-[#006f78]">Support Gen · Reach</p><h1 className="mt-2 text-4xl font-bold">{project.schemeName}</h1><p className="mt-2 text-[#657376]">Campaign entry points and conversion reporting</p></div>
-      <div className="flex gap-3"><Link href={`/admin/${project.slug}`} className="rounded-xl border border-[#c8d4d1] bg-white px-4 py-3 font-bold">Support dashboard</Link><form action="/api/admin/logout" method="post"><button className="rounded-xl border border-[#c8d4d1] bg-white px-4 py-3 font-bold">Sign out</button></form></div>
+      <div className="flex flex-wrap gap-3"><Link href="/" className="rounded-xl border border-[#c8d4d1] bg-white px-4 py-3 font-bold">Home</Link><Link href={`/admin/${project.slug}`} className="rounded-xl border border-[#c8d4d1] bg-white px-4 py-3 font-bold">Support dashboard</Link></div>
     </div>
+
+{!process.env.DATABASE_URL?<div className="mt-6 rounded-2xl border border-[#d8e1de] bg-white px-5 py-4 text-sm leading-6 text-[#536467]"><strong>Database not connected yet.</strong> Reach is shown in preview mode with zero values until Neon is connected.</div>:null}
 
     <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <Stat label="Landing visitors" value={totalVisitors}/>
