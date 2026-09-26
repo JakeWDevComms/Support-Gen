@@ -4,6 +4,29 @@ export type SupportBenefit = {
   phrasings: [string,string,string,...string[]];
 };
 
+export type ReachCampaign = {
+  slug: string;
+  name: string;
+  channel: string;
+  headline?: string;
+  intro?: string;
+  source: string;
+  medium: string;
+  campaign: string;
+  content?: string;
+};
+
+export type ReachConfig = {
+  eyebrow?: string;
+  headline: string;
+  intro: string;
+  supportCta?: string;
+  learnMoreCta?: string;
+  learnMoreUrl?: string;
+  keyPoints?: string[];
+  campaigns: ReachCampaign[];
+};
+
 export type ProjectConfig = {
   id: string;
   slug: string;
@@ -18,6 +41,7 @@ export type ProjectConfig = {
   theme: { primary: string; primaryDark: string; accent: string; background: string; logoUrl?: string };
   benefits: SupportBenefit[];
   letter: { salutations: string[]; openings: string[]; closings: string[]; subject: string; transparencyLine?: string };
+  reach?: ReachConfig;
   consultationCloses?: string;
   retentionMonths: number;
   privacy: { coreLawfulBasis: string; legitimateInterest?: string; contactEmail?: string; controllerPrivacyUrl?: string };
