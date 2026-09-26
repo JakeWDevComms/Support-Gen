@@ -42,6 +42,12 @@ export type ProjectConfig = {
   theme: { primary: string; primaryDark: string; accent: string; background: string; logoUrl?: string };
   benefits: SupportBenefit[];
   letter: { salutations: string[]; openings: string[]; transitions?: string[]; closings: string[]; subject: string; transparencyLine?: string };
+  campaign?: {
+    projectType?: "residential" | "employment" | "renewables" | "infrastructure" | "mixed" | "other";
+    destinationUrl?: string;
+    targetArea?: string;
+    audienceNotes?: string;
+  };
   reach?: ReachConfig;
   consultationCloses?: string;
   retentionMonths: number;
