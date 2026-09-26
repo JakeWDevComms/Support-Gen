@@ -7,7 +7,7 @@ import { submissions } from "@/lib/db/schema";
 import { getProject } from "@/lib/projects";
 
 export default async function AdminProjectPage({params}:{params:Promise<{projectSlug:string}>}){
- const {projectSlug}=await params,project=getProject(projectSlug);
+ const {projectSlug}=await params,project=await getProject(projectSlug);
  if(!project)notFound();
 
  const rows=process.env.DATABASE_URL
