@@ -67,11 +67,11 @@ export const castleHillsSolar: ProjectConfig = {
       "A £40,000 annual Community Benefit Fund, indexed to inflation"
     ],
     campaigns:[
-      {slug:"facebook-local",name:"Facebook – local audience",channel:"Meta",source:"facebook",medium:"paid_social",campaign:"castle-hills-facebook-local"},
-      {slug:"instagram-local",name:"Instagram – local audience",channel:"Meta",source:"instagram",medium:"paid_social",campaign:"castle-hills-instagram-local"},
-      {slug:"leaflet-qr",name:"Leaflet QR",channel:"Print",source:"leaflet",medium:"qr",campaign:"castle-hills-leaflet"},
-      {slug:"client-website",name:"Castle Hills website",channel:"Website",source:"castle-hills-website",medium:"referral",campaign:"castle-hills-client-website"},
-      {slug:"organic-social",name:"Organic social",channel:"Social",source:"organic-social",medium:"social",campaign:"castle-hills-organic"}
+      {slug:"facebook-local",name:"Facebook – local audience",channel:"Meta",journey:"direct",source:"facebook",medium:"paid_social",campaign:"castle-hills-facebook-local"},
+      {slug:"instagram-local",name:"Instagram – local audience",channel:"Meta",journey:"direct",source:"instagram",medium:"paid_social",campaign:"castle-hills-instagram-local"},
+      {slug:"leaflet-qr",name:"Leaflet QR",channel:"Print",journey:"direct",source:"leaflet",medium:"qr",campaign:"castle-hills-leaflet"},
+      {slug:"client-website",name:"Castle Hills website",channel:"Website",journey:"direct",source:"castle-hills-website",medium:"referral",campaign:"castle-hills-client-website"},
+      {slug:"organic-social",name:"Organic social",channel:"Social",journey:"direct",source:"organic-social",medium:"social",campaign:"castle-hills-organic"}
     ]
   },
   letter:{
