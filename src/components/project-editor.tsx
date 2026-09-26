@@ -54,6 +54,10 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
   const [dataController,setDataController]=useState(initial?.dataController??"");
   const [location,setLocation]=useState(initial?.location??"");
   const [pitch,setPitch]=useState(initial?.pitch??"");
+  const [projectType,setProjectType]=useState(initial?.campaign?.projectType??"other");
+  const [destinationUrl,setDestinationUrl]=useState(initial?.campaign?.destinationUrl??"");
+  const [targetArea,setTargetArea]=useState(initial?.campaign?.targetArea??initial?.location??"");
+  const [audienceNotes,setAudienceNotes]=useState(initial?.campaign?.audienceNotes??"");
   const [applicationReference,setApplicationReference]=useState(initial?.applicationReference??"");
   const [authorityName,setAuthorityName]=useState(initial?.planningAuthority.name??"");
   const [recipient,setRecipient]=useState(initial?.planningAuthority.to?.[0]??"");
@@ -162,6 +166,7 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
         cc:cc.split(",").map(v=>v.trim()).filter(Boolean)
       },
       theme:{primary,primaryDark,accent,background,logoUrl:logoUrl||undefined},
+      campaign:{projectType,destinationUrl:destinationUrl||undefined,targetArea:targetArea||undefined,audienceNotes:audienceNotes||undefined},
       benefits:cleanBenefits,
       letter:{
         salutations:["Dear Planning Officer,","Dear Development Management Team,","Dear Planning Team,"],
@@ -244,10 +249,25 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
           <Field label="Location"><input className={field} value={location} onChange={e=>setLocation(e.target.value)} placeholder="Town / district"/></Field>
           <Field label="Planning application reference *"><input className={field} value={applicationReference} onChange={e=>setApplicationReference(e.target.value)} placeholder="25/00000/FUL"/></Field>
         </div>
-        <Field label="One-line public pitch"><textarea rows={3} className={field} value={pitch} onChange={e=>setPitch(e.target.value)} placeholder="A short explanation shown at the top of the support tool."/></Field>
+        <Field label="Campaign summary"><textarea rows={3} className={field} value={pitch} onChange={e=>setPitch(e.target.value)} placeholder="A concise internal summary of the project and campaign objective."/></Field>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Project type">
+            <select className={field} value={projectType} onChange={e=>setProjectType(e.target.value as typeof projectType)}>
+              <option value="residential">Residential</option>
+              <option value="employment">Employment</option>
+              <option value="renewables">Renewables</option>
+              <option value="infrastructure">Infrastructure</option>
+              <option value="mixed">Mixed</option>
+              <option value="other">Other</option>
+            </select>
+          </Field>
+          <Field label="Campaign destination URL"><input className={field} value={destinationUrl} onChange={e=>setDestinationUrl(e.target.value)} placeholder="https://projectwebsite.co.uk/"/></Field>
+          <Field label="Target area"><input className={field} value={targetArea} onChange={e=>setTargetArea(e.target.value)} placeholder="e.g. Solihull and nearby communities"/></Field>
+          <Field label="Audience notes"><textarea rows={3} className={field} value={audienceNotes} onChange={e=>setAudienceNotes(e.target.value)} placeholder="Any legitimate local/contextual audience considerations."/></Field>
+        </div>
       </Section>
 
-      <Section number="02" title="Planning authority" description="Where the resident's email will be addressed.">
+      <Section number="02" title="Planning context" description="Planning authority and application details used to keep campaign copy accurate.">
         <div className="grid gap-4 md:grid-cols-2">
           <Field label="Planning authority *"><input className={field} value={authorityName} onChange={e=>setAuthorityName(e.target.value)} placeholder="Council name"/></Field>
           <Field label="Planning recipient email *"><input type="email" className={field} value={recipient} onChange={e=>setRecipient(e.target.value)} placeholder="planning@council.gov.uk"/></Field>
@@ -255,7 +275,7 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
         <Field label="CC addresses"><input className={field} value={cc} onChange={e=>setCc(e.target.value)} placeholder="reporting@devcomms.co.uk, client@example.com"/></Field>
       </Section>
 
-      <Section number="03" title="Areas of support" description="Add the factual benefits residents can choose from. Support Gen creates a standard wording library around each one.">
+      <Section number="03" title="Approved campaign facts" description="Add the factual benefits and messages the Ad Studio is allowed to use. Generated ads will be locked to these claims.">
         <div className="space-y-3">
           {benefits.map((benefit,index)=><div key={index} className="flex gap-3 rounded-2xl border border-[#e0e7e5] bg-[#fafcfb] p-4">
             <span className="mt-3 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#e7f2ef] text-xs font-black text-[#006f78]">{index+1}</span>
@@ -278,7 +298,7 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
         <Field label="Logo URL"><input className={field} value={logoUrl} onChange={e=>setLogoUrl(e.target.value)} placeholder="https://..."/></Field>
       </Section>
 
-      <Section number="05" title="Reach module" description="Tracked campaign links for Facebook, Instagram, leaflets, websites and other outreach.">
+      <Section number="05" title="Campaign tracking" description="Optional tracked links for Facebook, Instagram, leaflets, websites and other outreach.">
         <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-[#dce5e2] bg-[#f8fbfa] p-4">
           <input type="checkbox" className="h-5 w-5 accent-[#006f78]" checked={reachEnabled} onChange={e=>setReachEnabled(e.target.checked)}/>
           <span><strong>Enable Reach for this project</strong><span className="mt-1 block text-sm text-[#6d7d80]">Creates standard Facebook, Instagram, leaflet, website and organic tracked routes.</span></span>
@@ -289,8 +309,8 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
             <div className="mt-2 grid gap-3 md:grid-cols-2">
               <label className={`cursor-pointer rounded-2xl border p-4 transition ${reachJourney==="direct"?"border-[#006f78] bg-[#eef8f6]":"border-[#dce5e2] bg-white"}`}>
                 <input type="radio" name="reachJourney" value="direct" checked={reachJourney==="direct"} onChange={()=>setReachJourney("direct")} className="mr-2 accent-[#006f78]"/>
-                <strong>Direct to support tool</strong>
-                <span className="mt-1 block text-sm font-normal leading-6 text-[#6d7d80]">Best for the Clyst/Castle Hills model: the ad or QR link opens the survey/letter generator immediately.</span>
+                <strong>Direct to destination URL</strong>
+                <span className="mt-1 block text-sm font-normal leading-6 text-[#6d7d80]">The ad or QR link goes straight to the project website or campaign destination configured above.</span>
               </label>
               <label className={`cursor-pointer rounded-2xl border p-4 transition ${reachJourney==="landing"?"border-[#006f78] bg-[#eef8f6]":"border-[#dce5e2] bg-white"}`}>
                 <input type="radio" name="reachJourney" value="landing" checked={reachJourney==="landing"} onChange={()=>setReachJourney("landing")} className="mr-2 accent-[#006f78]"/>
@@ -323,7 +343,7 @@ export function ProjectEditor({initial,databaseReady,mode}:Props){
         <div className="mt-6 space-y-3 rounded-2xl bg-white/8 p-4 text-sm">
           <Summary label="Client" value={clientName||"Not set"}/>
           <Summary label="Application" value={applicationReference||"Not set"}/>
-          <Summary label="Support reasons" value={String(config.benefits.length)}/>
+          <Summary label="Campaign facts" value={String(config.benefits.length)}/>
           <Summary label="Reach" value={reachEnabled?(reachJourney==="direct"?"Direct to tool":"Landing first"):"Off"}/>
         </div>
 
