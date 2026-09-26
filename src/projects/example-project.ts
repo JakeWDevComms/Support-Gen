@@ -39,8 +39,7 @@ export const exampleProject: ProjectConfig = {
     salutations:["Dear Planning Officer,"],
     openings:["I am writing about SCHEME NAME, application APPLICATION REFERENCE."],
     closings:["Please take my comments into account when the application is determined."],
-    subject:"Representation on SCHEME NAME – APPLICATION REFERENCE",
-    transparencyLine:"I used an online drafting tool to help prepare this representation; the selections and comments above reflect my own views."
+    subject:"Representation on SCHEME NAME – APPLICATION REFERENCE"
   },
   consultationCloses:"2027-01-31",
   retentionMonths:18,
