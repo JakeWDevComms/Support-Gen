@@ -2,4 +2,30 @@ import { notFound } from "next/navigation";
 import { ProjectShell } from "@/components/project-shell";
 import { SupportForm } from "@/components/support-form";
 import { getProject } from "@/lib/projects";
-export default async function ProjectPage({params,searchParams}:{params:Promise<{projectSlug:string}>;searchParams:Promise<Record<string,string|string[]|undefined>>}){const {projectSlug}=await params;const project=getProject(projectSlug);if(!project)notFound();const query=await searchParams;const get=(key:string)=>typeof query[key]==="string"?query[key] as string:undefined;const tracking={utmSource:get("utm_source"),utmMedium:get("utm_medium"),utmCampaign:get("utm_campaign"),utmContent:get("utm_content"),utmTerm:get("utm_term")};return <ProjectShell project={project}><section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-12"><div className="mb-8 max-w-3xl"><p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--project-primary)]">Have your say</p><h1 className="mt-3 text-4xl font-bold tracking-tight text-[var(--project-dark)] md:text-5xl">Support {project.schemeName}</h1><p className="mt-4 text-lg leading-8 text-[#5d6b6e]">{project.pitch}</p><p className="mt-3 text-sm text-[#5d6b6e]">Your representation will be addressed to {project.planningAuthority.name}. You choose the points included and you decide whether to send it.</p></div><SupportForm project={project} tracking={tracking}/></section></ProjectShell>;}
+
+export default async function ProjectPage({params,searchParams}:{params:Promise<{projectSlug:string}>;searchParams:Promise<Record<string,string|string[]|undefined>>}){
+  const {projectSlug}=await params,project=getProject(projectSlug);
+  if(!project)notFound();
+  const query=await searchParams;
+  const get=(key:string)=>typeof query[key]==="string"?query[key] as string:undefined;
+  const tracking={
+    utmSource:get("utm_source"),
+    utmMedium:get("utm_medium"),
+    utmCampaign:get("utm_campaign"),
+    utmContent:get("utm_content"),
+    utmTerm:get("utm_term"),
+    reachCampaign:get("reach_campaign")
+  };
+
+  return <ProjectShell project={project}>
+    <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-12">
+      <div className="mb-8 max-w-3xl">
+        <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--project-primary)]">Have your say</p>
+        <h1 className="mt-3 text-4xl font-bold tracking-tight text-[var(--project-dark)] md:text-5xl">Support {project.schemeName}</h1>
+        <p className="mt-4 text-lg leading-8 text-[#5d6b6e]">{project.pitch}</p>
+        <p className="mt-3 text-sm text-[#5d6b6e]">Your representation will be addressed to {project.planningAuthority.name}. You choose the points included and you decide whether to send it.</p>
+      </div>
+      <SupportForm project={project} tracking={tracking}/>
+    </section>
+  </ProjectShell>;
+}
