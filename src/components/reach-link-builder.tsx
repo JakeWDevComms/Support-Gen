@@ -4,14 +4,17 @@ import type { ProjectConfig,ReachCampaign } from "@/projects/types";
 
 function campaignPath(project:ProjectConfig,item:ReachCampaign){
   if(item.journey==="landing")return `/${project.slug}/reach/${item.slug}`;
+  const destination=project.campaign?.destinationUrl;
   const q=new URLSearchParams({
     utm_source:item.source,
     utm_medium:item.medium,
-    utm_campaign:item.campaign,
-    reach_campaign:item.slug
+    utm_campaign:item.campaign
   });
   if(item.content)q.set("utm_content",item.content);
-  return `/${project.slug}?${q.toString()}`;
+  if(!destination)return `/${project.slug}?${q.toString()}`;
+  const url=new URL(destination);
+  q.forEach((value,key)=>url.searchParams.set(key,value));
+  return url.toString();
 }
 
 export function ReachLinkBuilder({project}:{project:ProjectConfig}){
@@ -27,11 +30,14 @@ export function ReachLinkBuilder({project}:{project:ProjectConfig}){
       utm_medium:medium.trim()||"referral",
       utm_campaign:campaign.trim()||`${project.slug}-custom`
     });
-    return `/${project.slug}?${q.toString()}`;
-  },[project.slug,source,medium,campaign]);
+    const destination=project.campaign?.destinationUrl;
+    if(!destination)return `/${project.slug}?${q.toString()}`;
+    const url=new URL(destination);
+    q.forEach((value,key)=>url.searchParams.set(key,value));
+    return url.toString();
+  },[project.slug,project.campaign?.destinationUrl,source,medium,campaign]);
 
-  async function copy(path:string,key:string){
-    await navigator.clipboard.writeText(`${window.location.origin}${path}`);
+  function absolute(path:string){return /^https?:\/\//i.test(path)?path:`${window.location.origin}${path}`;}\n\n  async function copy(path:string,key:string){\n    await navigator.clipboard.writeText(absolute(path));
     setCopied(key);
     window.setTimeout(()=>setCopied(null),1800);
   }
@@ -40,7 +46,7 @@ export function ReachLinkBuilder({project}:{project:ProjectConfig}){
     setQrBusy(key);
     try{
       const QRCode=await import("qrcode");
-      const url=`${window.location.origin}${path}`;
+      const url=absolute(path);
       const dataUrl=await QRCode.toDataURL(url,{width:1200,margin:2,errorCorrectionLevel:"H"});
       const a=document.createElement("a");
       a.href=dataUrl;
