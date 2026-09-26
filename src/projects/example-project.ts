@@ -17,6 +17,24 @@ export const exampleProject: ProjectConfig = {
     "Second genuinely different way of expressing the same factual reason.",
     "Third phrasing for this reason."
   ]}],
+  reach:{
+    eyebrow:"SCHEME NAME",
+    headline:"Short public-facing campaign headline",
+    intro:"A concise factual introduction explaining the proposal and why somebody might want to find out more or register support.",
+    supportCta:"Yes, I support the proposals",
+    learnMoreCta:"I'd like to know more",
+    learnMoreUrl:"https://www.example-consultation-site.co.uk/",
+    keyPoints:[
+      "First factual project benefit",
+      "Second factual project benefit",
+      "Third factual project benefit"
+    ],
+    campaigns:[
+      {slug:"facebook-local",name:"Facebook – local audience",channel:"Meta",source:"facebook",medium:"paid_social",campaign:"PROJECT-facebook-local"},
+      {slug:"leaflet-qr",name:"Leaflet QR",channel:"Print",source:"leaflet",medium:"qr",campaign:"PROJECT-leaflet"},
+      {slug:"client-website",name:"Client website",channel:"Website",source:"client-website",medium:"referral",campaign:"PROJECT-client-website"}
+    ]
+  },
   letter:{
     salutations:["Dear Planning Officer,"],
     openings:["I am writing about SCHEME NAME, application APPLICATION REFERENCE."],
