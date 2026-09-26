@@ -39,12 +39,12 @@ export function generateLetter(project:ProjectConfig,input:LetterInput){
     .filter((b):b is NonNullable<typeof b>=>Boolean(b));
 
   const ordered=seededOrder(selected,`${identity}|paragraph-order|${input.benefitIds.join("|")}`);
-  const transitions=project.letter.transitions??[];
+  const transitions=seededOrder(project.letter.transitions??[],`${identity}|transition-order`);
 
   const reasonParagraphs=ordered.map((benefit,index)=>{
     const sentence=choose(benefit.phrasings,`${identity}|${benefit.id}`);
     if(index===0||transitions.length===0)return sentence;
-    const transition=choose(transitions,`${identity}|transition|${benefit.id}|${index}`);
+    const transition=transitions[(index-1)%transitions.length];
     return `${transition}\n\n${sentence}`;
   });
 
